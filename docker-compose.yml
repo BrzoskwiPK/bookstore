@@ -1,0 +1,53 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - books
+      - cart
+      - orders
+      - users
+
+  books:
+    build:
+      context: ./backend/services/books
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    restart: on-failure
+
+  cart:
+    build:
+      context: ./backend/services/cart
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    restart: on-failure
+
+  orders:
+    build:
+      context: ./backend/services/orders
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    restart: on-failure
+
+  users:
+    build:
+      context: ./backend/services/users
+      dockerfile: Dockerfile
+    depends_on:
+      - database
+    restart: on-failure
+
+  database:
+    build:
+      context: ./backend/database
+      dockerfile: Dockerfile
+    ports:
+      - 27017:27017
+    restart: always
