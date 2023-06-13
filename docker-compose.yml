@@ -12,15 +12,15 @@ services:
   #     - orders
   #     - users
 
-  # books:
-  #   build:
-  #     context: ./backend/services/books
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3001:3001
-  #   depends_on:
-  #     - database
-  #   restart: on-failure
+  books:
+    build:
+      context: ./backend/services/books
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    depends_on:
+      - database
+    restart: on-failure
 
   # cart:
   #   build:
