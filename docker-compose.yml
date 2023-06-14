@@ -1,62 +1,20 @@
-version: "3.1"
+version: "3"
 services:
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3000:3000
-  #   depends_on:
-  #     - books
-  #     - cart
-  #     - orders
-  #     - users
-
-  books:
-    build:
-      context: ./backend/services/books
-      dockerfile: Dockerfile
-    ports:
-      - 3001:3001
-    depends_on:
-      - database
-    restart: on-failure
-
-  # cart:
-  #   build:
-  #     context: ./backend/services/cart
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3002:3002
-  #   depends_on:
-  #     - database
-  #   restart: on-failure
-
-  # orders:
-  #   build:
-  #     context: ./backend/services/orders
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3003:3003
-  #   depends_on:
-  #     - database
-  #   restart: on-failure
-
-  # users:
-  #   build:
-  #     context: ./backend/services/users
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - 3004:3004
-  #   depends_on:
-  #     - database
-  #   restart: on-failure
-
   database:
     image: 'mongo'
-    container_name: 'mongoContainer'
+    container_name: 'mongoDB'
     volumes:
       - ./backend/services/database/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
       - ./mongo-volume:/data/db
     ports:
       - '27017-27019:27017-27019'
+  books:
+    build:
+      context: ./backend/services/books
+      dockerfile: Dockerfile
+    container_name: 'booksManager'
+    ports:
+      - 3001:3001
+    depends_on:
+      - database
+    restart: on-failure

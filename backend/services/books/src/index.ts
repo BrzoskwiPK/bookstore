@@ -1,10 +1,10 @@
 import express, { Application } from 'express'
-import mongoose, { ConnectOptions } from 'mongoose'
+import mongoose from 'mongoose'
 import bookRoutes from './routes/bookRoutes'
 
 const app: Application = express()
 const PORT = 3001
-const CONNECTION_STRING = 'mongodb://localhost:27017/bookstore'
+const CONNECTION_STRING = 'mongodb://localhost:27017'
 
 app.use(express.json())
 
