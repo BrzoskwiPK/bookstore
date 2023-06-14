@@ -4,7 +4,7 @@ import bookRoutes from './routes/bookRoutes'
 
 const app: Application = express()
 const PORT = 3001
-const CONNECTION_STRING = 'mongodb://localhost:27017'
+const CONNECTION_STRING = 'mongodb://database:27017'
 
 app.use(express.json())
 

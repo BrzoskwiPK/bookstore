@@ -8,6 +8,8 @@ services:
       - ./mongo-volume:/data/db
     ports:
       - '27017-27019:27017-27019'
+    networks:
+      - app-network
   books:
     build:
       context: ./backend/services/books
@@ -15,6 +17,11 @@ services:
     container_name: 'booksManager'
     ports:
       - 3001:3001
+    networks:
+      - app-network
     depends_on:
       - database
     restart: on-failure
+networks:
+  app-network:
+    driver: bridge
