@@ -1,26 +1,26 @@
-db.createCollection("users");
+// db.createCollection("users");
 db.createCollection("books");
 
-db.users.insertMany([
-  {
-    username: "admin",
-    password: "admin",
-    email: "admin@wsei.pl",
-    role: "admin"
-  },
-  {
-    username: "user",
-    password: "password",
-    email: "user@wsei.pl",
-    role: "standard"
-  },
-  {
-    username: "user2",
-    password: "password",
-    email: "user2@wsei.pl",
-    role: "standard"
-  }
-]);
+// db.users.insertMany([
+//   {
+//     username: "admin",
+//     password: "admin",
+//     email: "admin@wsei.pl",
+//     role: "admin"
+//   },
+//   {
+//     username: "user",
+//     password: "password",
+//     email: "user@wsei.pl",
+//     role: "standard"
+//   },
+//   {
+//     username: "user2",
+//     password: "password",
+//     email: "user2@wsei.pl",
+//     role: "standard"
+//   }
+// ]);
 
 db.books.insertMany([
   {

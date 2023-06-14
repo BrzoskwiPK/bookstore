@@ -14,7 +14,7 @@ services:
     build:
       context: ./backend/services/books
       dockerfile: Dockerfile
-    container_name: 'booksManager'
+    container_name: 'booksService'
     ports:
       - 3001:3001
     networks:
@@ -26,9 +26,20 @@ services:
     build:
       context: ./backend/services/cart
       dockerfile: Dockerfile
-    container_name: cartManager
+    container_name: cartService
     ports:
       - 3002:3002
+    networks:
+      - app-network
+    depends_on:
+      - database
+  auth:
+    build:
+      context: ./backend/services/auth
+      dockerfile: Dockerfile
+    container_name: authService
+    ports:
+      - 3003:3003
     networks:
       - app-network
     depends_on:
