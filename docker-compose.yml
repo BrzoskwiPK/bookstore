@@ -44,6 +44,19 @@ services:
       - app-network
     depends_on:
       - database
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - 3004:3004
+    networks:
+      - app-network
+    depends_on:
+      - database
+      - cart
+      - auth
 networks:
   app-network:
     driver: bridge
