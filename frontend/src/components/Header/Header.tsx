@@ -1,94 +1,24 @@
-import {
-  AppBar,
-  Container,
-  Hidden,
-  Toolbar,
-  Typography,
-  SwipeableDrawer,
-  Divider,
-  List,
-  Button,
-} from '@mui/material'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import MenuIcon from '@mui/icons-material/Menu'
-import { useState } from 'react'
-import { IconButton } from '@mui/material'
-import {
-  appBarStyle,
-  hamburgerItemStyle,
-  listStyle,
-  navBarItemStyle,
-  toolbarStyle,
-} from './Styles'
+import { AppBar, Container, Toolbar, Typography } from '@mui/material'
+import { FC, useState } from 'react'
+import { appBarStyle, toolbarStyle } from './Styles'
+import { Link } from 'react-router-dom'
+import Navigation from '../Navigation/Navigation'
+import HamburgerMenu from '../HamburgerMenu/HamburgerMenu'
 
-const navItems = [
-  {
-    label: 'Login',
-    href: '/login',
-  },
-  {
-    label: 'Search',
-    href: '/search',
-  },
-  {
-    label: 'My Cart',
-    href: '/cart',
-  },
-]
-
-const Header = () => {
+const Header: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <AppBar position="sticky" sx={appBarStyle}>
-      <Container maxWidth="xl">
+    <AppBar sx={appBarStyle}>
+      <Container maxWidth={false}>
         <Toolbar sx={toolbarStyle}>
           <Typography variant="h6" component="h1">
-            _bookstore
+            <Link to="/">_bookstore</Link>
           </Typography>
-          <div>
-            <Hidden smDown>
-              {navItems.map(({ label, href }) => (
-                <Button href={href} key={label} sx={navBarItemStyle}>
-                  {label}
-                </Button>
-              ))}
-            </Hidden>
-            <Hidden smUp>
-              <IconButton onClick={() => setIsOpen(true)}>
-                <MenuIcon className="hamburgerIcon" />
-              </IconButton>
-            </Hidden>
-          </div>
+          <Navigation setIsOpen={setIsOpen} />
         </Toolbar>
       </Container>
-      <SwipeableDrawer
-        anchor="right"
-        open={isOpen}
-        onOpen={() => setIsOpen(true)}
-        onClose={() => setIsOpen(false)}
-      >
-        <div
-          onClick={() => setIsOpen(false)}
-          onKeyDown={() => setIsOpen(false)}
-          role="button"
-          tabIndex={0}
-        >
-          <IconButton>
-            <ChevronRightIcon />
-          </IconButton>
-        </div>
-        <Divider />
-        <List sx={listStyle}>
-          <Hidden>
-            {navItems.map(({ label, href }) => (
-              <Button href={href} key={label} sx={hamburgerItemStyle}>
-                {label}
-              </Button>
-            ))}
-          </Hidden>
-        </List>
-      </SwipeableDrawer>
+      <HamburgerMenu setIsOpen={setIsOpen} isOpen={isOpen} />
     </AppBar>
   )
 }
