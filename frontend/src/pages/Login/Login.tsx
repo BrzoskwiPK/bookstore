@@ -10,7 +10,7 @@ import {
   styled,
   useMediaQuery,
 } from '@mui/material'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { FC, useState } from 'react'
 import {
   boundaryDivStyle,
@@ -28,24 +28,56 @@ import {
   smallFormControlStyle,
   smallButtonStyle,
 } from './Styles'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useSignIn } from 'react-auth-kit'
 
 const Login: FC = () => {
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleLogin = (event: React.FormEvent) => {
+  const signIn = useSignIn()
+  const navigate = useNavigate()
+
+  const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault()
 
-  // TBD handling request
-  //   axios.post('http://localhost:3003/auth/login', {
-  //     username,
-  //     password,
-  //   })
+    try {
+      const userData: LoginRequest = {
+        email,
+        password
+      }
+
+      const response = await axios.post('http://localhost:3003/login', userData)
+
+      const user = await axios.get('http://localhost:3003/loadUser', {
+        headers: {
+          'Authorization': `Bearer ${response.data.accessToken}`
+        }
+      })
+
+      signIn({
+        token: response.data.accessToken,
+        expiresIn: 15,
+        tokenType: 'Bearer',
+        refreshToken: response.data.refreshToken,
+        authState: {
+          username: user.data.username
+        }
+      })
+
+      navigate('/dashboard')
+    } catch (error) {
+      if (error && error instanceof AxiosError) 
+        setError(error.response?.data.message)
+      
+      else if (error && error instanceof Error)
+        setError(error.message)
+    }
   }
 
-  const isSubmitButtonDisabled = !username || !password
+  const isSubmitButtonDisabled = !email || !password
   const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
   return (
@@ -61,17 +93,18 @@ const Login: FC = () => {
           >
             Hello Again!
           </Typography>
-          <form method="post" onSubmit={e => handleLogin(e)} style={formStyle}>
+          <form style={formStyle}>
             <PurpleTextField
               required
-              label="Username"
+              label="Email"
               variant="outlined"
-              value={username}
-              onChange={e => setUsername(e.currentTarget.value)}
+              value={email}
+              onChange={e => setEmail(e.currentTarget.value)}
               sx={isSmallDevice ? smallTextFieldStyle : textFieldStyle}
             />
             <PurpleTextField
               required
+              type='password'
               label="Password"
               variant="outlined"
               value={password}
@@ -96,6 +129,7 @@ const Login: FC = () => {
               variant="contained"
               type="submit"
               sx={isSmallDevice ? smallButtonStyle : null}
+              onClick={handleLogin}
             >
               LOGIN
             </FormButton>
@@ -109,6 +143,7 @@ const Login: FC = () => {
               </Link>
             </Typography>
           </form>
+          {error && <Typography paragraph={true}>{error}</Typography>}
         </div>
       </div>
     </Container>

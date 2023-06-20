@@ -6,12 +6,14 @@ import connectToDb from './utils/connectToDb'
 import log from './utils/logger'
 import router from './routes'
 import deserializeUser from './middleware/deserializeUser';
+import cors from 'cors'
 
 
 const app: Application = express()
 const PORT = config.get('port')
 
 app.use(express.json())
+app.use(cors())
 app.use(deserializeUser)
 app.use(router)
 

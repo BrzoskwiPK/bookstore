@@ -1,7 +1,7 @@
 import { Button, Container, Hidden, TextField, Typography, styled, useMediaQuery } from "@mui/material"
 import { FC, useState } from "react"
-import axios from "axios"
-import { Link } from "react-router-dom"
+import axios, { AxiosError } from "axios"
+import { Link, useNavigate } from "react-router-dom"
 import {
   boundaryDivStyle,
   containerStyle,
@@ -17,24 +17,65 @@ import {
   smallHeaderStyle,
   smallButtonStyle,
 } from './Styles'
+import { useSignIn } from "react-auth-kit"
 
 const Register: FC = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-
-  const handleLogin = (event: React.FormEvent) => {
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
+  const [error, setError] = useState('')
+  
+  const signIn = useSignIn()
+  const navigate = useNavigate()
+  
+  const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault()
     
-    // TBD handling request
-    // axios.post('http://localhost:3003/auth/register', {
-    //   username,
-    //   email,
-    //   password,
-    // })
+    const userData: RegisterRequest = {
+      username,
+      email,
+      password,
+      passwordConfirmation
+    }
+
+    const loginData: LoginRequest = {
+      email,
+      password
+    }
+
+    try {
+      await axios.post('http://localhost:3003/register', userData)
+      const loginResponse = await axios.post('http://localhost:3003/login', loginData)
+
+      const user = await axios.get('http://localhost:3003/loadUser', {
+        headers: {
+          'Authorization': `Bearer ${loginResponse.data.accessToken}`
+        }
+      })
+
+      signIn({
+        token: loginResponse.data.accessToken,
+        expiresIn: 15,
+        tokenType: 'Bearer',
+        refreshToken: loginResponse.data.refreshToken,
+          authState: {
+            username: user.data.username
+          }
+      })
+
+      navigate('/dashboard')
+
+    } catch (error) {
+      if (error && error instanceof AxiosError) 
+        setError(error.response?.data.message)
+      
+      else if (error && error instanceof Error)
+        setError(error.message)
+    } 
   }
-  const isSubmitButtonDisabled = !username || !email || !password || !confirmPassword
+
+  const isSubmitButtonDisabled = !username || !email || !password || !passwordConfirmation || password !== passwordConfirmation
   const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
   return (
@@ -47,7 +88,7 @@ const Register: FC = () => {
           <Typography variant='h1' sx={isSmallDevice ? smallHeaderStyle : headerStyle}>
             Welcome!
           </Typography>
-          <form method="post" onSubmit={e => handleLogin(e)} style={formStyle}>
+          <form style={formStyle}>
             <PurpleTextField
               required
               label="Username"
@@ -79,8 +120,8 @@ const Register: FC = () => {
               type='password'
               label="Confirm Password"
               variant="outlined"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.currentTarget.value)}
+              value={passwordConfirmation}
+              onChange={e => setPasswordConfirmation(e.currentTarget.value)}
               sx={isSmallDevice ? smallTextFieldStyle : textFieldStyle}
             />
             <FormButton
@@ -89,6 +130,7 @@ const Register: FC = () => {
               variant="contained"
               type="submit"
               sx={isSmallDevice ? smallButtonStyle : null}
+              onClick={handleRegister}
             >
               REGISTER
             </FormButton>
@@ -96,6 +138,7 @@ const Register: FC = () => {
               Already registered? <Link to="/login" style={linkStyle}>Sign in</Link>
             </Typography>
           </form>
+          {error && <Typography paragraph={true}>{error}</Typography>}
         </div>
       </div>
     </Container>

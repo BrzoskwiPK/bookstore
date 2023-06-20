@@ -3,20 +3,35 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { FC } from 'react'
 import { navBarItemStyle } from '../Header/Styles'
 import { pageRoutes } from '../../routes/pageRoutes'
+import { useIsAuthenticated, useSignOut } from 'react-auth-kit'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   setIsOpen: (flag: boolean) => void
 }
 
 const Navigation: FC<Props> = ({ setIsOpen }) => {
+  const signOut = useSignOut()
+  const navigate = useNavigate()
+  const isAuthenticated = useIsAuthenticated()
+  
+  const handleLogout = (e: React.FormEvent) => {
+    e.preventDefault()
+    signOut()
+    navigate('/login')
+  }
+
   return (
     <div>
       <Hidden smDown>
-        {pageRoutes.map(({ label, href }) => (
+        {isAuthenticated() && pageRoutes.map(({ label, href }) => (
           <Button href={href} key={label} sx={navBarItemStyle}>
             {label}
           </Button>
         ))}
+        {isAuthenticated() ?
+         <Button onClick={handleLogout} sx={navBarItemStyle}>Logout</Button> :
+         <Button onClick={() => navigate('/login')} sx={navBarItemStyle}>Login</Button>}
       </Hidden>
       <Hidden smUp>
         <IconButton onClick={() => setIsOpen(true)}>

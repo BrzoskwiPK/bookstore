@@ -5,7 +5,7 @@ import {
 import express from 'express'
 import validateResource from '../middleware/validateResource'
 import { createUserSchema } from '../schema/user.schema'
-import requireUser from 'middleware/requireUser'
+import requireUser from '../middleware/requireUser'
 
 const router = express.Router()
 
