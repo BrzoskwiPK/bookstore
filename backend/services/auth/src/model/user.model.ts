@@ -9,7 +9,7 @@ import {
 import argon2 from 'argon2'
 import log from '../utils/logger'
 
-export const privateFields = ['password', '__v']
+export const privateFields = ['password', '__v', 'role']
 
 @pre<User>('save', async function () {
   if (!this.isModified('password')) return
@@ -37,6 +37,9 @@ export class User {
 
   @prop({ required: true })
   password: string
+
+  @prop({ required: true, default: 'normal'})
+  role: string
 
   async validatePassword(this: DocumentType<User>, candidatePassword: string) {
     try {
