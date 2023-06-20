@@ -44,7 +44,7 @@ const NoPage = () => {
           variant="contained"
           sx={isSmallDevice ? smallDeviceButton : null}
         >
-          <Link to="/">BACK TO HOME</Link>
+          <Link to="/dashboard">BACK TO HOME</Link>
         </StyledButton>
       </div>
     </Container>

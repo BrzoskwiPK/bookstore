@@ -4,14 +4,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Register from './pages/Register/Register'
 import Layout from './components/Layout/Layout'
 import NoPage from './pages/NoPage/NoPage'
-import { RequireAuth } from 'react-auth-kit'
+import { RequireAuth, useIsAuthenticated } from 'react-auth-kit'
 import Dashboard from './pages/Dashboard/Dashboard'
 
 const App = () => {
+  const isAuthenticated = useIsAuthenticated()
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<Layout isLoggedIn={isAuthenticated()} />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path='/dashboard' element={<RequireAuth loginPath='/login'>
