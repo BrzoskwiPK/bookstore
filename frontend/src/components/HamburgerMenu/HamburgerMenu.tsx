@@ -8,8 +8,10 @@ import {
 } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { FC } from 'react'
-import { hamburgerItemStyle, listStyle } from '../Header/Styles'
+import { listStyle, navBarItemStyle } from './Styles'
 import { pageRoutes } from '../../routes/pageRoutes'
+import { useIsAuthenticated, useSignOut } from 'react-auth-kit'
+import { useNavigate } from 'react-router-dom'
 
 interface Props {
   isOpen: boolean
@@ -17,6 +19,16 @@ interface Props {
 }
 
 const HamburgerMenu: FC<Props> = ({ isOpen, setIsOpen }) => {
+  const navigate = useNavigate()
+  const isAuthenticated = useIsAuthenticated()
+  const signOut = useSignOut()
+  
+  const handleLogout = (e: React.FormEvent) => {
+    e.preventDefault()
+    signOut()
+    navigate('/login')
+  }
+  
   return (
     <SwipeableDrawer
       anchor="right"
@@ -37,11 +49,14 @@ const HamburgerMenu: FC<Props> = ({ isOpen, setIsOpen }) => {
       <Divider />
       <List sx={listStyle}>
         <Hidden>
-          {pageRoutes.map(({ label, href }) => (
-            <Button href={href} key={label} sx={hamburgerItemStyle}>
-              {label}
-            </Button>
-          ))}
+        {isAuthenticated() && pageRoutes.map(({ label, href }) => (
+          <Button href={href} key={label} sx={navBarItemStyle}>
+            {label}
+          </Button>
+        ))}
+        {isAuthenticated() ?
+         <Button onClick={handleLogout} sx={navBarItemStyle}>Logout</Button> :
+         <Button onClick={() => navigate('/login')} sx={navBarItemStyle}>Login</Button>}
         </Hidden>
       </List>
     </SwipeableDrawer>

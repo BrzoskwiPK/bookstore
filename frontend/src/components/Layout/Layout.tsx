@@ -4,7 +4,6 @@ import Header from '../Header/Header'
 import { FC } from 'react'
 import { containerStyle, outletStyle } from './Styles'
 
-
 const Layout: FC = () => {
   return (
     <div style={containerStyle}>
