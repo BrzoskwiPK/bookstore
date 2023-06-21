@@ -38,7 +38,7 @@ export class User {
   @prop({ required: true })
   password: string
 
-  @prop({ required: true, default: 'normal'})
+  @prop({ required: true, default: 'standard'})
   role: string
 
   async validatePassword(this: DocumentType<User>, candidatePassword: string) {

@@ -87,3 +87,8 @@ export const smallButtonStyle: CSSProperties = {
   marginTop: '10px',
   marginBottom: '10px',
 }
+
+export const errorStyle: CSSProperties = {
+  color: 'red',
+  fontWeight: 'bold',
+}

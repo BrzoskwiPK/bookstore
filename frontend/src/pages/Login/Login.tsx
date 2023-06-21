@@ -27,6 +27,7 @@ import {
   smallHeaderStyle,
   smallFormControlStyle,
   smallButtonStyle,
+  errorStyle,
 } from './Styles'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignIn } from 'react-auth-kit'
@@ -46,34 +47,35 @@ const Login: FC = () => {
     try {
       const userData: LoginRequest = {
         email,
-        password
+        password,
       }
-
+      setError('')
       const response = await axios.post('http://localhost:3003/login', userData)
+      if (!response.data.error) {
+        const user = await axios.get('http://localhost:3003/loadUser', {
+          headers: {
+            Authorization: `Bearer ${response.data.accessToken}`,
+          },
+        })
 
-      const user = await axios.get('http://localhost:3003/loadUser', {
-        headers: {
-          'Authorization': `Bearer ${response.data.accessToken}`
-        }
-      })
+        signIn({
+          token: response.data.accessToken,
+          expiresIn: 15,
+          tokenType: 'Bearer',
+          refreshToken: response.data.refreshToken,
+          authState: {
+            username: user.data.username,
+          },
+        })
 
-      signIn({
-        token: response.data.accessToken,
-        expiresIn: 15,
-        tokenType: 'Bearer',
-        refreshToken: response.data.refreshToken,
-        authState: {
-          username: user.data.username
-        }
-      })
-
-      navigate('/dashboard')
+        navigate('/dashboard')
+      } else {
+        setError(response.data.error)
+      }
     } catch (error) {
-      if (error && error instanceof AxiosError) 
+      if (error && error instanceof AxiosError)
         setError(error.response?.data.message)
-      
-      else if (error && error instanceof Error)
-        setError(error.message)
+      else if (error && error instanceof Error) setError(error.message)
     }
   }
 
@@ -104,7 +106,7 @@ const Login: FC = () => {
             />
             <PurpleTextField
               required
-              type='password'
+              type="password"
               label="Password"
               variant="outlined"
               value={password}
@@ -143,7 +145,11 @@ const Login: FC = () => {
               </Link>
             </Typography>
           </form>
-          {error && <Typography paragraph={true}>{error}</Typography>}
+          {error && (
+            <Typography sx={errorStyle} paragraph={true}>
+              {error}
+            </Typography>
+          )}
         </div>
       </div>
     </Container>

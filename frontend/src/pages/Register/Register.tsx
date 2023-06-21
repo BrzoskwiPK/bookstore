@@ -1,7 +1,15 @@
-import { Button, Container, Hidden, TextField, Typography, styled, useMediaQuery } from "@mui/material"
-import { FC, useState } from "react"
-import axios, { AxiosError } from "axios"
-import { Link, useNavigate } from "react-router-dom"
+import {
+  Button,
+  Container,
+  Hidden,
+  TextField,
+  Typography,
+  styled,
+  useMediaQuery,
+} from '@mui/material'
+import { FC, useState } from 'react'
+import axios, { AxiosError } from 'axios'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   boundaryDivStyle,
   containerStyle,
@@ -16,8 +24,9 @@ import {
   smallTextFieldStyle,
   smallHeaderStyle,
   smallButtonStyle,
+  errorStyle,
 } from './Styles'
-import { useSignIn } from "react-auth-kit"
+import { useSignIn } from 'react-auth-kit'
 
 const Register: FC = () => {
   const [username, setUsername] = useState('')
@@ -25,57 +34,73 @@ const Register: FC = () => {
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [error, setError] = useState('')
-  
+
   const signIn = useSignIn()
   const navigate = useNavigate()
-  
+
   const handleRegister = async (event: React.FormEvent) => {
     event.preventDefault()
-    
+
     const userData: RegisterRequest = {
       username,
       email,
       password,
-      passwordConfirmation
+      passwordConfirmation,
     }
 
     const loginData: LoginRequest = {
       email,
-      password
+      password,
     }
 
     try {
-      await axios.post('http://localhost:3003/register', userData)
-      const loginResponse = await axios.post('http://localhost:3003/login', loginData)
+      setError('')
+      const response = await axios.post(
+        'http://localhost:3003/register',
+        userData,
+      )
+      if (!response.data.error) {
+        const loginResponse = await axios.post(
+          'http://localhost:3003/login',
+          loginData,
+        )
+        if (!loginResponse.data.error) {
+          const user = await axios.get('http://localhost:3003/loadUser', {
+            headers: {
+              Authorization: `Bearer ${loginResponse.data.accessToken}`,
+            },
+          })
 
-      const user = await axios.get('http://localhost:3003/loadUser', {
-        headers: {
-          'Authorization': `Bearer ${loginResponse.data.accessToken}`
+          signIn({
+            token: loginResponse.data.accessToken,
+            expiresIn: 15,
+            tokenType: 'Bearer',
+            refreshToken: loginResponse.data.refreshToken,
+            authState: {
+              username: user.data.username,
+            },
+          })
+
+          navigate('/dashboard')
+        } else {
+          setError(response.data.error)
         }
-      })
-
-      signIn({
-        token: loginResponse.data.accessToken,
-        expiresIn: 15,
-        tokenType: 'Bearer',
-        refreshToken: loginResponse.data.refreshToken,
-          authState: {
-            username: user.data.username
-          }
-      })
-
-      navigate('/dashboard')
-
+      } else {
+        setError(response.data.error)
+      }
     } catch (error) {
-      if (error && error instanceof AxiosError) 
+      if (error && error instanceof AxiosError)
         setError(error.response?.data.message)
-      
-      else if (error && error instanceof Error)
-        setError(error.message)
-    } 
+      else if (error && error instanceof Error) setError(error.message)
+    }
   }
 
-  const isSubmitButtonDisabled = !username || !email || !password || !passwordConfirmation || password !== passwordConfirmation
+  const isSubmitButtonDisabled =
+    !username ||
+    !email ||
+    !password ||
+    !passwordConfirmation ||
+    password !== passwordConfirmation
   const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
   return (
@@ -85,7 +110,10 @@ const Register: FC = () => {
           <div style={imageDivStyle}></div>
         </Hidden>
         <div style={formDivStyle}>
-          <Typography variant='h1' sx={isSmallDevice ? smallHeaderStyle : headerStyle}>
+          <Typography
+            variant="h1"
+            sx={isSmallDevice ? smallHeaderStyle : headerStyle}
+          >
             Welcome!
           </Typography>
           <form style={formStyle}>
@@ -99,8 +127,8 @@ const Register: FC = () => {
             />
             <PurpleTextField
               required
-              type='email'
-              label='Email'
+              type="email"
+              label="Email"
               variant="outlined"
               value={email}
               onChange={e => setEmail(e.currentTarget.value)}
@@ -108,7 +136,7 @@ const Register: FC = () => {
             />
             <PurpleTextField
               required
-              type='password'
+              type="password"
               label="Password"
               variant="outlined"
               value={password}
@@ -117,7 +145,7 @@ const Register: FC = () => {
             />
             <PurpleTextField
               required
-              type='password'
+              type="password"
               label="Confirm Password"
               variant="outlined"
               value={passwordConfirmation}
@@ -134,11 +162,21 @@ const Register: FC = () => {
             >
               REGISTER
             </FormButton>
-            <Typography paragraph={true} sx={isSmallDevice ? smallParagraphStyle : paragraphStyle}>
-              Already registered? <Link to="/login" style={linkStyle}>Sign in</Link>
+            <Typography
+              paragraph={true}
+              sx={isSmallDevice ? smallParagraphStyle : paragraphStyle}
+            >
+              Already registered?{' '}
+              <Link to="/login" style={linkStyle}>
+                Sign in
+              </Link>
             </Typography>
           </form>
-          {error && <Typography paragraph={true}>{error}</Typography>}
+          {error && (
+            <Typography sx={errorStyle} paragraph={true}>
+              {error}
+            </Typography>
+          )}
         </div>
       </div>
     </Container>
@@ -165,7 +203,7 @@ const PurpleTextField = styled(TextField)`
   && {
     & .MuiOutlinedInput-root {
       & fieldset {
-        border-color: #5a228b; 
+        border-color: #5a228b;
       }
       &:hover fieldset {
         border-color: #5a228b;
@@ -178,7 +216,7 @@ const PurpleTextField = styled(TextField)`
       color: black;
     }
     &:hover .MuiInputLabel-root {
-      color: #5a228b; 
+      color: #5a228b;
     }
     &.Mui-focused .MuiInputLabel-root {
       color: #5a228b;

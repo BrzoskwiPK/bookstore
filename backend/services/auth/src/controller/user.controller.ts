@@ -16,7 +16,7 @@ export const createUserHandler = async (
     return res.send(omit(user.toJSON(), privateFields))
   } catch (error) {
     if (error.code === 11000)
-      return res.status(409).send('Account already exists')
+      return res.send({error: 'Account already exists'})
 
     return res.status(500).send(error)
   }
