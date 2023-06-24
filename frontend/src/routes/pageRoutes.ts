@@ -1,7 +1,7 @@
 export const pageRoutes = [
   {
-    label: 'Search',
-    href: '/search',
+    label: 'Bookshelf',
+    href: '/bookshelf',
   },
   {
     label: 'My Cart',

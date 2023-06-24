@@ -1,7 +1,7 @@
 import { Button, Hidden, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import { FC } from 'react'
-import { navBarItemStyle } from '../Header/Styles'
+import { navBarItemStyle } from '../../styles/Header'
 import { pageRoutes } from '../../routes/pageRoutes'
 import { useIsAuthenticated, useSignOut } from 'react-auth-kit'
 import { useNavigate } from 'react-router-dom'

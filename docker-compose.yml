@@ -4,59 +4,71 @@ services:
     image: 'mongo'
     container_name: 'mongoDB'
     volumes:
-      - ./backend/database/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-      - ./mongo-volume:/data/db
+      - ./backend/src/adapters/mongodb/seed/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     ports:
       - '27017-27019:27017-27019'
-    networks:
-      - app-network
-  books:
-    build:
-      context: ./backend/services/books
-      dockerfile: Dockerfile
-    container_name: 'booksService'
-    ports:
-      - 3001:3001
-    networks:
-      - app-network
-    depends_on:
-      - database
-    restart: on-failure
-  cart:
-    build:
-      context: ./backend/services/cart
-      dockerfile: Dockerfile
-    container_name: cartService
-    ports:
-      - 3002:3002
-    networks:
-      - app-network
-    depends_on:
-      - database
-  auth:
-    build:
-      context: ./backend/services/auth
-      dockerfile: Dockerfile
-    container_name: authService
-    ports:
-      - 3003:3003
-    networks:
-      - app-network
-    depends_on:
-      - database
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    ports:
-      - 3004:3004
-    networks:
-      - app-network
-    depends_on:
-      - database
-      - cart
-      - auth
-networks:
-  app-network:
-    driver: bridge
+    # networks:
+    #   - app-network
+  # books:
+  #   build:
+  #     context: ./backend/src
+  #     dockerfile: Dockerfile
+  #   container_name: 'booksService'
+  #   ports:
+  #     - 3001:3001
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - database
+  #   restart: on-failure
+  # cart:
+  #   build:
+  #     context: ./backend/src
+  #     dockerfile: Dockerfile
+  #   container_name: cartService
+  #   ports:
+  #     - 3002:3002
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - database
+  # auth:
+  #   build:
+  #     context: ./backend/src
+  #     dockerfile: Dockerfile
+  #   container_name: authService
+  #   ports:
+  #     - 3003:3003
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - database
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: frontend
+  #   ports:
+  #     - 3004:3004
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - database
+  #     - cart
+  #     - auth
+  # payment:
+  #   build:
+  #     context: ./backend/src
+  #     dockerfile: Dockerfile
+  #   container_name: paymentService
+  #   ports:
+  #     - 3005:3005
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - cart
+  #     - auth
+  #     - books
+# networks:
+#   app-network:
+#     driver: bridge

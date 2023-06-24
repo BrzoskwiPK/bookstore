@@ -1,15 +1,15 @@
-import './App.css'
-import Login from './pages/Login/Login'
+import './styles/App.css'
+import Login from './components/Authentication/Login'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Register from './pages/Register/Register'
-import Layout from './components/Layout/Layout'
-import NoPage from './pages/NoPage/NoPage'
+import Register from './components/Authentication/Register'
+import Layout from './components/Layout'
+import NoPage from './components/NoPage'
 import { RequireAuth } from 'react-auth-kit'
-import Dashboard from './pages/Dashboard/Dashboard'
-import HomePage from './pages/HomePage/HomePage'
+import Dashboard from './components/Dashboard'
+import HomePage from './components/HomePage'
+import Bookshelf from './components/Bookshelf'
 
 const App = () => {
-
   return (
     <BrowserRouter>
       <Routes>
@@ -17,9 +17,22 @@ const App = () => {
           <Route index element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path='/dashboard' element={<RequireAuth loginPath='/login'>
-            <Dashboard />
-          </RequireAuth>} />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth loginPath="/login">
+                <Dashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/bookshelf"
+            element={
+              <RequireAuth loginPath="/login">
+                <Bookshelf />
+              </RequireAuth>
+            }
+          />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
