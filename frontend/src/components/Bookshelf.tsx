@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import axios, { AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 import {
   Table,
   TableBody,
@@ -12,35 +12,28 @@ import {
   Button,
   styled,
   Rating,
+  Snackbar,
+  Alert,
 } from '@mui/material'
 import { tableHeadStyle, tableStyle } from '../styles/Bookshelf'
 import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp'
 import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp'
 import DoNotDisturbOnSharpIcon from '@mui/icons-material/DoNotDisturbOnSharp'
-
-interface Book {
-  title: string
-  author: string
-  availability: string
-  description: string
-  price: number
-  rate: number
-}
+import { fetchBooks } from '../services/api'
 
 const Bookshelf: FC = () => {
   const [books, setBooks] = useState<Book[]>([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: AxiosResponse = await axios.get(
-          'http://localhost:3001/books',
-        )
+        const response: AxiosResponse = await fetchBooks()
         setBooks(response.data)
       } catch (error) {
-        console.error('Wystąpił błąd:', error)
+        console.log(error)
       }
     }
 
@@ -61,9 +54,13 @@ const Bookshelf: FC = () => {
     setPage(0)
   }
 
-  const addToCart = (book: Book) => console.log('tbd')
+  const addToCart = (book: Book) => setIsSnackbarOpen(true)
 
-  return (
+  return !books.length ? (
+    <Alert severity="error" sx={{ color: 'black' }}>
+      Books service is unavailable! Check connection
+    </Alert>
+  ) : (
     <Paper sx={tableStyle}>
       <TableContainer>
         <Table>
@@ -136,6 +133,19 @@ const Bookshelf: FC = () => {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={1500}
+        onClose={() => setIsSnackbarOpen(false)}
+      >
+        <Alert
+          onClose={() => setIsSnackbarOpen(false)}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          Successfully added the book to your cart!
+        </Alert>
+      </Snackbar>
     </Paper>
   )
 }
@@ -149,6 +159,6 @@ export const StyledButton = styled(Button)({
     backgroundColor: '#752eb3',
   },
   '&:disabled': {
-    cursor: 'not-allowed'
-  }
+    cursor: 'not-allowed',
+  },
 })

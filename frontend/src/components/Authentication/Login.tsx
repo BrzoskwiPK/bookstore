@@ -11,7 +11,7 @@ import {
   styled,
   useMediaQuery,
 } from '@mui/material'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { FC, useState } from 'react'
 import {
   boundaryDivStyle,
@@ -28,10 +28,10 @@ import {
   smallHeaderStyle,
   smallFormControlStyle,
   smallButtonStyle,
-  errorStyle,
 } from '../../styles/Login'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSignIn } from 'react-auth-kit'
+import { loadUser, loginUser } from '../../services/api'
 
 const Login: FC = () => {
   const [email, setEmail] = useState('')
@@ -51,14 +51,9 @@ const Login: FC = () => {
         password,
       }
       setError('')
-      const response = await axios.post('http://localhost:3003/login', userData)
+      const response = await loginUser(userData)
       if (!response.data.error) {
-        const user = await axios.get('http://localhost:3003/loadUser', {
-          headers: {
-            Authorization: `Bearer ${response.data.accessToken}`,
-          },
-        })
-
+        const user = await loadUser(response.data.accessToken)
         signIn({
           token: response.data.accessToken,
           expiresIn: 15,
@@ -71,13 +66,13 @@ const Login: FC = () => {
         })
 
         navigate('/dashboard')
-      } else {
-        setError(response.data.error)
-      }
+      } else 
+          setError(response.data.error)
     } catch (error) {
       if (error && error instanceof AxiosError)
         setError(error.response?.data.message)
-      else if (error && error instanceof Error) setError(error.message)
+      else if (error && error instanceof Error)
+        setError(error.message)
     }
   }
 
@@ -115,7 +110,7 @@ const Login: FC = () => {
               onChange={e => setPassword(e.currentTarget.value)}
               sx={isSmallDevice ? smallTextFieldStyle : textFieldStyle}
             />
-            <FormGroup sx={{ marginTop: '-5px'}}>
+            <FormGroup sx={{ marginTop: '-5px' }}>
               <FormControlLabel
                 control={
                   <FormattedCheckbox

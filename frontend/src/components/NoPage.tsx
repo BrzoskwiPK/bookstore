@@ -17,8 +17,9 @@ import {
   paragraphStyle,
   textStyle,
 } from '../styles/NoPage'
+import { FC } from 'react'
 
-const NoPage = () => {
+const NoPage: FC = () => {
   const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
   return (

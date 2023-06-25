@@ -9,7 +9,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { FC, useState } from 'react'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   boundaryDivStyle,
@@ -27,6 +27,7 @@ import {
   smallButtonStyle,
 } from '../../styles/Register'
 import { useSignIn } from 'react-auth-kit'
+import { loadUser, loginUser, registerUser } from '../../services/api'
 
 const Register: FC = () => {
   const [username, setUsername] = useState('')
@@ -55,22 +56,11 @@ const Register: FC = () => {
 
     try {
       setError('')
-      const response = await axios.post(
-        'http://localhost:3003/register',
-        userData,
-      )
+      const response = await registerUser(userData)
       if (!response.data.error) {
-        const loginResponse = await axios.post(
-          'http://localhost:3003/login',
-          loginData,
-        )
+        const loginResponse = await loginUser(loginData)
         if (!loginResponse.data.error) {
-          const user = await axios.get('http://localhost:3003/loadUser', {
-            headers: {
-              Authorization: `Bearer ${loginResponse.data.accessToken}`,
-            },
-          })
-
+          const user = await loadUser(loginResponse.data.accessToken)
           signIn({
             token: loginResponse.data.accessToken,
             expiresIn: 15,
@@ -83,16 +73,15 @@ const Register: FC = () => {
           })
 
           navigate('/dashboard')
-        } else {
+        } else 
+            setError(response.data.error)
+      } else 
           setError(response.data.error)
-        }
-      } else {
-        setError(response.data.error)
-      }
     } catch (error) {
       if (error && error instanceof AxiosError)
         setError(error.response?.data.message)
-      else if (error && error instanceof Error) setError(error.message)
+      else if (error && error instanceof Error)
+        setError(error.message)
     }
   }
 

@@ -10,7 +10,9 @@ import {
 import { useAuthUser } from 'react-auth-kit'
 import { containerStyle, listStyle } from '../styles/Dashboard'
 import { Link } from 'react-router-dom'
-const Dashboard = () => {
+import { FC } from 'react'
+
+const Dashboard: FC = () => {
   const authData = useAuthUser()
 
   return (

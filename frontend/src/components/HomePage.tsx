@@ -1,8 +1,9 @@
 import { Button, Container, Hidden, Typography, useMediaQuery, styled } from "@mui/material"
 import { avatarStyle, containerStyle, headingStyle, paragraphStyle, smallDeviceButton, smallDeviceHeadingStyle, smallDeviceParagraphStyle, textStyle } from "../styles/HomePage"
 import { Link } from "react-router-dom"
+import { FC } from "react"
 
-const HomePage = () => {
+const HomePage: FC = () => {
     const isSmallDevice = useMediaQuery('(max-width: 450px)')
   
     return (
