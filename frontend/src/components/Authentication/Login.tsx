@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Checkbox,
   Container,
@@ -51,7 +52,6 @@ const Login: FC = () => {
       }
       setError('')
       const response = await axios.post('http://localhost:3003/login', userData)
-
       if (!response.data.error) {
         const user = await axios.get('http://localhost:3003/loadUser', {
           headers: {
@@ -75,7 +75,7 @@ const Login: FC = () => {
         setError(response.data.error)
       }
     } catch (error) {
-      if (error && error instanceof AxiosError) 
+      if (error && error instanceof AxiosError)
         setError(error.response?.data.message)
       else if (error && error instanceof Error) setError(error.message)
     }
@@ -115,7 +115,7 @@ const Login: FC = () => {
               onChange={e => setPassword(e.currentTarget.value)}
               sx={isSmallDevice ? smallTextFieldStyle : textFieldStyle}
             />
-            <FormGroup>
+            <FormGroup sx={{ marginTop: '-5px'}}>
               <FormControlLabel
                 control={
                   <FormattedCheckbox
@@ -147,11 +147,7 @@ const Login: FC = () => {
               </Link>
             </Typography>
           </form>
-          {error && (
-            <Typography sx={errorStyle} paragraph={true}>
-              {error}
-            </Typography>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
         </div>
       </div>
     </Container>

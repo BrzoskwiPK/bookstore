@@ -30,6 +30,7 @@ db.books.insertMany([
     description: 'The first book in the Harry Potter series',
     price: 29.99,
     availability: true,
+    rate: 5
   },
   {
     title: 'To Kill a Mockingbird',
@@ -37,6 +38,7 @@ db.books.insertMany([
     description: 'A classic novel about racial injustice',
     price: 14.99,
     availability: true,
+    rate: 4
   },
   {
     title: '1984',
@@ -44,6 +46,7 @@ db.books.insertMany([
     description: 'A dystopian novel set in a totalitarian society',
     price: 19.99,
     availability: false,
+    rate: 4
   },
   {
     title: 'The Great Gatsby',
@@ -51,6 +54,7 @@ db.books.insertMany([
     description: 'A novel about the American Dream and the Jazz Age',
     price: 12.99,
     availability: true,
+    rate: 5
   },
   {
     title: 'Pride and Prejudice',
@@ -58,6 +62,7 @@ db.books.insertMany([
     description: 'A classic romance novel',
     price: 9.99,
     availability: true,
+    rate: 5
   },
   {
     title: 'The Catcher in the Rye',
@@ -65,6 +70,7 @@ db.books.insertMany([
     description: 'A coming-of-age novel',
     price: 15.99,
     availability: true,
+    rate: 4
   },
   {
     title: 'To Kill a Kingdom',
@@ -72,6 +78,7 @@ db.books.insertMany([
     description: 'A fantasy novel about a siren princess',
     price: 17.99,
     availability: true,
+    rate: 3
   },
   {
     title: 'The Hobbit',
@@ -79,6 +86,7 @@ db.books.insertMany([
     description: 'A fantasy adventure novel',
     price: 22.99,
     availability: false,
+    rate: 5
   },
   {
     title: 'The Alchemist',
@@ -86,6 +94,7 @@ db.books.insertMany([
     description: 'A philosophical novel about a young shepherd',
     price: 13.99,
     availability: true,
+    rate: 5
   },
   {
     title: 'The Hunger Games',
@@ -93,5 +102,6 @@ db.books.insertMany([
     description: 'A dystopian novel set in a post-apocalyptic world',
     price: 16.99,
     availability: true,
+    rate: 5
   },
 ])

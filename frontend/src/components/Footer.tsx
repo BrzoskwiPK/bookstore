@@ -4,7 +4,7 @@ import { FC } from 'react'
 
 const Footer: FC = () => {
   return (
-    <Container maxWidth={false} sx={footerStyle}>
+    <Container component="footer" maxWidth={false} sx={footerStyle}>
       <Toolbar>Copyright &copy; 2023 brzoskwi</Toolbar>
     </Container>
   )

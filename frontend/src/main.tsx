@@ -5,7 +5,7 @@ import { AuthProvider, createRefresh } from 'react-auth-kit'
 import axios from 'axios'
 
 const refreshToken = createRefresh({
-  interval: 14,
+  interval: 30,
   refreshApiCallback: async ({
     authToken,
     refreshToken,
@@ -20,19 +20,21 @@ const refreshToken = createRefresh({
         },
       )
 
+      console.log(refreshTokenExpiresAt)
       return {
         isSuccess: true,
         newAuthToken: response.data.accessToken,
-        refreshToken: refreshToken,
-        refreshTokenExpireIn: refreshTokenExpiresAt,
+        newAuthTokenExpireIn: 30,
+        newRefreshToken: refreshToken,
+        newRefreshTokenExpiresIn: 60,
       }
     } catch (error) {
       console.error(error)
       return {
         isSuccess: false,
         newAuthToken: '',
-        refreshToken: '',
-        refreshTokenExpiresIn: 0,
+        newRefreshToken: '',
+        newRefreshTokenExpiresIn: 0,
       }
     }
   },

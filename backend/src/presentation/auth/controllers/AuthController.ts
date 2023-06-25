@@ -10,7 +10,7 @@ export const signUp = async (req: Request, res: Response) => {
 
     res.status(201).json({ user })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.json({ error: error.message })
   }
 }
 
@@ -18,11 +18,14 @@ export const signIn = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
 
-    const { accessToken, refreshToken } = await AuthService.signIn(email, password)
+    const { accessToken, refreshToken } = await AuthService.signIn(
+      email,
+      password,
+    )
 
     res.json({ accessToken, refreshToken })
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.json({ error: error.message })
   }
 }
 

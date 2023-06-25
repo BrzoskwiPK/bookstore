@@ -1,18 +1,18 @@
 import { CSSProperties } from 'react'
 
-export const outletStyle: CSSProperties = {
-  width: '100%',
-  height: '86vh',
+export const containerStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-}
-
-export const containerStyle: CSSProperties = {
+  flexDirection: 'column',
   width: '100%',
   height: '100%',
+  paddingTop: '20px',
+}
+
+export const listStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
 }

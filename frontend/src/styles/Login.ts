@@ -79,7 +79,6 @@ export const smallTextFieldStyle: CSSProperties = {
 
 export const smallFormControlStyle: CSSProperties = {
   alignSelf: 'center',
-  margin: '10px 0',
 }
 
 export const smallButtonStyle: CSSProperties = {
@@ -91,5 +90,5 @@ export const smallButtonStyle: CSSProperties = {
 export const errorStyle: CSSProperties = {
   color: 'red',
   fontWeight: 'bold',
-  textAlign: 'center'
+  textAlign: 'center',
 }

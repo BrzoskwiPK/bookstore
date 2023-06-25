@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Container,
   Hidden,
@@ -24,7 +25,6 @@ import {
   smallTextFieldStyle,
   smallHeaderStyle,
   smallButtonStyle,
-  errorStyle,
 } from '../../styles/Register'
 import { useSignIn } from 'react-auth-kit'
 
@@ -173,11 +173,7 @@ const Register: FC = () => {
               </Link>
             </Typography>
           </form>
-          {error && (
-            <Typography sx={errorStyle} paragraph={true}>
-              {error}
-            </Typography>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
         </div>
       </div>
     </Container>

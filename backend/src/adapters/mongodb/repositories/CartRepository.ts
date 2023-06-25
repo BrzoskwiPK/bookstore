@@ -3,7 +3,9 @@ import Cart from '../../../domain/cart/models/Cart'
 import CartItem from '../../../domain/cart/models/CartItem'
 import CartRepositoryInterface from '../../../interfaces/CartRepositoryInterface'
 
-interface ICartDocument extends Cart, Document {}
+interface ICartDocument extends Cart, Document {
+  user: Schema.Types.ObjectId
+}
 
 const cartItemSchema: Schema<CartItem> = new Schema<CartItem>({
   book: { type: Schema.Types.ObjectId, ref: 'Book', required: true },
@@ -12,6 +14,7 @@ const cartItemSchema: Schema<CartItem> = new Schema<CartItem>({
 })
 
 const cartSchema: Schema<ICartDocument> = new Schema<ICartDocument>({
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   items: [cartItemSchema],
   totalQuantity: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
