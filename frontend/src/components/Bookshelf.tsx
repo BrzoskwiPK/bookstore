@@ -20,12 +20,17 @@ import ShoppingCartSharpIcon from '@mui/icons-material/ShoppingCartSharp'
 import CheckCircleSharpIcon from '@mui/icons-material/CheckCircleSharp'
 import DoNotDisturbOnSharpIcon from '@mui/icons-material/DoNotDisturbOnSharp'
 import { fetchBooks } from '../services/api'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from '../redux/store'
+import { addToCart } from '../redux/slices/cartSlice'
 
 const Bookshelf: FC = () => {
   const [books, setBooks] = useState<Book[]>([])
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false)
+
+  const dispatch: AppDispatch = useDispatch()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,7 +59,11 @@ const Bookshelf: FC = () => {
     setPage(0)
   }
 
-  const addToCart = (book: Book) => setIsSnackbarOpen(true)
+  const handleAddToCart =
+    (payload: CartItem) => {
+      dispatch(addToCart(payload))
+      setIsSnackbarOpen(true)
+    }
 
   return !books.length ? (
     <Alert severity="error" sx={{ color: 'black' }}>
@@ -104,7 +113,13 @@ const Bookshelf: FC = () => {
                     {book.availability == 'true' ? (
                       <StyledButton
                         variant="contained"
-                        onClick={() => addToCart(book)}
+                        onClick={() =>
+                          handleAddToCart({
+                            book,
+                            quantity: 1,
+                            subtotal: book.price,
+                          })
+                        }
                       >
                         ADD TO CART{' '}
                         <ShoppingCartSharpIcon sx={{ marginLeft: '5px' }} />

@@ -21,7 +21,7 @@ const Dashboard: FC = () => {
         <Grid container spacing={3} sx={{ width: '100%', height: '100%' }}>
           <Grid item xs={12}>
             <Typography variant="h4" align="center" gutterBottom>
-              Welcome to Our Bookstore, <strong>{authData()?.username}</strong>!
+              Welcome to our Bookstore, <strong>{authData()?.username}</strong>!
             </Typography>
           </Grid>
           <Grid item xs={12}>

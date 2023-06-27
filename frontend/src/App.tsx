@@ -8,6 +8,7 @@ import { RequireAuth } from 'react-auth-kit'
 import Dashboard from './components/Dashboard'
 import HomePage from './components/HomePage'
 import Bookshelf from './components/Bookshelf'
+import Cart from './components/Cart'
 
 const App = () => {
   return (
@@ -30,6 +31,14 @@ const App = () => {
             element={
               <RequireAuth loginPath="/login">
                 <Bookshelf />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <RequireAuth loginPath="/login">
+                <Cart />
               </RequireAuth>
             }
           />

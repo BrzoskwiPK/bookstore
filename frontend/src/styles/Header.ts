@@ -2,12 +2,12 @@ import { CSSProperties } from 'react'
 
 export const appBarStyle: CSSProperties = {
   backgroundColor: '#5a228b',
-  height: '7vh'
+  height: '7vh',
 }
 
 export const toolbarStyle: CSSProperties = {
   display: 'flex',
-  justifyContent: 'space-between'
+  justifyContent: 'space-between',
 }
 
 export const listStyle: CSSProperties = {
@@ -16,7 +16,7 @@ export const listStyle: CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   color: 'black',
-  minWidth: '250px'
+  minWidth: '250px',
 }
 
 export const navBarItemStyle: CSSProperties = {
@@ -24,7 +24,7 @@ export const navBarItemStyle: CSSProperties = {
   fontSize: '15px',
   marginLeft: '25px',
   color: 'white',
-  textDecoration: 'none'
+  textDecoration: 'none',
 }
 
 export const hamburgerItemStyle: CSSProperties = {
@@ -32,5 +32,5 @@ export const hamburgerItemStyle: CSSProperties = {
   fontSize: '18px',
   marginLeft: '25px',
   color: 'black',
-  textDecoration: 'none'
+  textDecoration: 'none',
 }
