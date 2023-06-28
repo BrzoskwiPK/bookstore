@@ -20,8 +20,8 @@ export const cartSlice = createSlice({
       } else {
         state.items.push(action.payload)
       }
-      state.totalQuantity += action.payload.quantity
-      state.totalPrice += action.payload.subtotal
+      state.totalQuantity += 1
+      state.totalPrice += action.payload.book.price
 
       return state
     },
@@ -35,10 +35,52 @@ export const cartSlice = createSlice({
         totalPrice: state.totalPrice - action.payload.subtotal,
       }
     },
+    decreaseQuantity: (state, action: PayloadAction<CartItem>): Cart => {
+      const existingItem = state.items.find(
+        item => item.book.title === action.payload.book.title,
+      )
+
+      if (existingItem) {
+        if (existingItem.quantity === 1) {
+          state.items = state.items.filter(
+            item => item.book.title !== action.payload.book.title,
+          )
+        } else {
+          existingItem.quantity -= 1
+        }
+
+        state.totalQuantity -= 1
+        state.totalPrice -= action.payload.subtotal
+      }
+
+      return state
+    },
+    increaseQuantity: (state, action: PayloadAction<CartItem>): Cart => {
+      const existingItem = state.items.find(
+        item => item.book.title === action.payload.book.title,
+      )
+
+      if (existingItem) {
+        existingItem.quantity += 1
+      } else {
+        state.items.push(action.payload)
+      }
+
+      state.totalQuantity += 1
+      state.totalPrice += action.payload.subtotal
+
+      return state
+    },
     clearCart: state => {
       return initialState
     },
   },
 })
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions
+export const {
+  addToCart,
+  removeFromCart,
+  clearCart,
+  decreaseQuantity,
+  increaseQuantity,
+} = cartSlice.actions

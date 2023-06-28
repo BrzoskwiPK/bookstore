@@ -14,9 +14,30 @@ import {
   Grid,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { CSSProperties, FC } from 'react'
-import { clearCart, removeFromCart } from '../redux/slices/cartSlice'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
+import { FC } from 'react'
+import {
+  clearCart,
+  decreaseQuantity,
+  increaseQuantity,
+  removeFromCart,
+} from '../redux/slices/cartSlice'
 import { Link } from 'react-router-dom'
+
+const styles = {
+  header: {
+    flex: '1',
+    width: '25%',
+    fontWeight: 'bold',
+  },
+  value: {
+    flex: '1',
+    width: '25%',
+  },
+}
 
 const Cart: FC = () => {
   const cart = useSelector((state: RootState) => state)
@@ -34,14 +55,22 @@ const Cart: FC = () => {
     // TODO
   }
 
-  const basePrice = cart.items.reduce((total, item) => total + item.subtotal, 0)
+  function handleDecreaseQuantity(item: CartItem): void {
+    dispatch(decreaseQuantity(item))
+  }
+
+  function handleIncreaseQuantity(item: CartItem): void {
+    dispatch(increaseQuantity(item))
+  }
+
+  const basePrice = cart.totalPrice
   const deliveryCost = basePrice > 100 ? 0 : 12
 
   const calculateDiscount = (basePrice: number) => {
     let discount = 0
 
-    if (cart.items.length >= 5) discount = basePrice * 0.1
-    else if (cart.items.length >= 3) discount = basePrice * 0.05
+    if (cart.totalQuantity >= 5) discount = basePrice * 0.1
+    else if (cart.totalQuantity >= 3) discount = basePrice * 0.05
 
     return discount
   }
@@ -66,13 +95,17 @@ const Cart: FC = () => {
     <Alert severity="error" sx={{ color: 'black' }}>
       There is no books in the cart!{' '}
       <Link to="/bookshelf" style={{ color: 'black', fontWeight: 'bold' }}>
-        Click and choose some
+        Click and choose some.
       </Link>
     </Alert>
   ) : (
     <Container
       maxWidth={false}
-      sx={{ width: '80%', backgroundColor: '#f6f6f6', border: '2px solid black' }}
+      sx={{
+        width: '80%',
+        backgroundColor: '#f6f6f6',
+        border: '2px solid black',
+      }}
     >
       <Typography
         sx={{ margin: '30px 0', fontWeight: 'bold', color: '#5a228b' }}
@@ -86,11 +119,25 @@ const Cart: FC = () => {
         <ListItem>
           <ListItemText
             primary={
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong>Title</strong>
-                <strong>Quantity</strong>
-                <strong>Remove</strong>
-                <strong>Price</strong>
+              <div style={{ display: 'flex' }}>
+                <Typography variant="h6" component="span" sx={styles.header}>
+                  Title
+                </Typography>
+                <Typography variant="h6" component="span" sx={styles.header}>
+                  Quantity
+                </Typography>
+                <Typography
+                  variant="h6"
+                  component="span"
+                  sx={{
+                    flex: '1',
+                    width: '25%',
+                    fontWeight: 'bold',
+                    marginLeft: '-50px',
+                  }}
+                >
+                  Price
+                </Typography>
               </div>
             }
           />
@@ -99,13 +146,78 @@ const Cart: FC = () => {
           <ListItem key={index}>
             <ListItemText
               primary={item.book.title}
-              secondary={`Quantity: ${item.quantity}`}
+              sx={{ flex: '1', width: '25%' }}
+            />
+            <Box
+              sx={{
+                flex: '1',
+                width: '25%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                flexDirection: 'row',
+              }}
+            >
+              <IconButton
+                aria-label="add"
+                onClick={() => handleIncreaseQuantity(item)}
+                sx={{ padding: '0', marginLeft: '30px' }}
+              >
+                <Box
+                  sx={{
+                    backgroundColor: '#5a228b',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <AddIcon sx={{ color: 'white' }} />
+                </Box>
+              </IconButton>
+              <IconButton
+                sx={{ padding: '10px 10px', color: 'black !important' }}
+                disabled
+              >
+                <Box
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <ListItemText primary={item.quantity} />
+                </Box>
+              </IconButton>
+              <IconButton
+                aria-label="remove"
+                onClick={() => handleDecreaseQuantity(item)}
+                sx={{ padding: '0' }}
+              >
+                <Box
+                  sx={{
+                    backgroundColor: '#5a228b',
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <RemoveIcon sx={{ color: 'white' }} />
+                </Box>
+              </IconButton>
+            </Box>
+            <ListItemText
+              primary={`$${item.subtotal.toFixed(2)}`}
+              sx={{ flex: '1', width: '25%' }}
             />
             <ListItemSecondaryAction>
               <IconButton
-                edge="end"
                 aria-label="delete"
-                sx={{ color: '#5a228b' }}
                 onClick={() => handleRemoveFromCart(item)}
               >
                 <DeleteIcon />
@@ -114,76 +226,61 @@ const Cart: FC = () => {
           </ListItem>
         ))}
       </List>
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-        sx={{ marginTop: '20px' }}
-      >
-        <Grid item xs={12} sm={6} md={3}>
-          <Box sx={boxStyle}>
-            <Typography variant="button" sx={{ fontWeight: 'bold' }}>
-              Discount {discount.toFixed(2)} PLN
-            </Typography>
-          </Box>
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        <Grid item xs={12} sm={6} md={8}>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<CloseIcon />}
+            onClick={handleClearCart}
+            disabled={cart.items.length === 0}
+            fullWidth
+          >
+            Clear Cart
+          </Button>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Box sx={boxStyle}>
-            <Typography variant="button" sx={{ fontWeight: 'bold' }}>
-              Delivery {deliveryCost.toFixed(2)} PLN
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Box sx={boxStyle}>
-            <Typography variant="button" sx={{ fontWeight: 'bold' }}>
-              Subtotal {basePrice.toFixed(2)} PLN
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Box sx={boxStyle}>
-            <Typography variant="button" sx={{ fontWeight: 'bold' }}>
-              Total {totalPrice.toFixed(2)} PLN
-            </Typography>
-          </Box>
+        <Grid item xs={12} sm={6} md={4}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<CheckIcon />}
+            onClick={handleCheckout}
+            disabled={cart.items.length === 0}
+            fullWidth
+          >
+            Checkout (${totalPrice.toFixed(2)})
+          </Button>
         </Grid>
       </Grid>
       <Box
-        sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          mt: 2,
+          p: 2,
+          backgroundColor: '#f0f0f0',
+          borderTop: '2px solid black',
+        }}
       >
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleClearCart}
-          sx={{ margin: '0 10px 10px 0' }}
+        <Typography variant="subtitle1" component="span">
+          Base Price: ${basePrice.toFixed(2)}
+        </Typography>
+        <Typography variant="subtitle1" component="span">
+          Discount: ${discount.toFixed(2)}
+        </Typography>
+        <Typography variant="subtitle1" component="span">
+          Delivery Cost: ${deliveryCost.toFixed(2)}
+        </Typography>
+        <Typography
+          variant="h5"
+          component="h2"
+          sx={{ fontWeight: 'bold', color: '#5a228b' }}
         >
-          Clear Cart
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleCheckout}
-          sx={{ margin: '0 0 10px 0' }}
-        >
-          Checkout
-        </Button>
+          Total: ${totalPrice.toFixed(2)}
+        </Typography>
       </Box>
     </Container>
   )
 }
 
 export default Cart
-
-export const boxStyle: CSSProperties = {
-  flexBasis: '25%',
-  border: '1px solid black',
-  padding: '15px',
-  marginRight: '10px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
-}
