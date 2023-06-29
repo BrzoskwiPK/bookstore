@@ -4,6 +4,7 @@ const BASE_URL = 'http://localhost:SERVICE_PORT'
 const authPort = '3003'
 const booksPort = '3001'
 const cartPort = '3002'
+const paymentPort = '3005'
 
 export const loginUser = async (loginData: LoginRequest) =>
   axios.post(`${BASE_URL.replace('SERVICE_PORT', authPort)}/login`, loginData)
@@ -49,3 +50,17 @@ export const addToCart = async (data: {
 
   return response.data
 }
+
+export const processPayment = async () =>
+  await axios.post(`${BASE_URL.replace('SERVICE_PORT', paymentPort)}/payment`)
+
+export const createCart = async (cartItem: Cart) =>
+  await axios.post(
+    `${BASE_URL.replace('SERVICE_PORT', cartPort)}/carts`,
+    cartItem,
+  )
+
+export const fetchCarts = async (username: string) =>
+  await axios.post(`${BASE_URL.replace('SERVICE_PORT', cartPort)}/userCarts`, {
+    username,
+  })

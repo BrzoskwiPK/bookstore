@@ -8,16 +8,16 @@ import { persistor, store } from './redux/store.ts'
 import { PersistGate } from 'redux-persist/integration/react'
 
 const refreshToken = createRefresh({
-  interval: 30,
+  interval: 120,
   refreshApiCallback: async ({ authToken, refreshToken }) => {
     try {
       const response = await refreshAuthToken(authToken, refreshToken)
       return {
         isSuccess: true,
         newAuthToken: response.data.accessToken,
-        newAuthTokenExpireIn: 30,
+        newAuthTokenExpireIn: 120,
         newRefreshToken: refreshToken,
-        newRefreshTokenExpiresIn: 60,
+        newRefreshTokenExpiresIn: 120,
       }
     } catch (error) {
       console.error(error)

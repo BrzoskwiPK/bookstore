@@ -3,8 +3,8 @@ export default {
   cartServicePort: 3002,
   authServicePort: 3003,
   paymentServicePort: 3005,
-  dbUri: 'mongodb://localhost:27017',
+  dbUri: 'mongodb://localhost:27017/bookstore',
   logLevel: 'info',
   accessTokenPrivateKey: '',
-  refreshTokenPrivateKey: ''
+  refreshTokenPrivateKey: '',
 }

@@ -7,4 +7,8 @@ export const pageRoutes = [
     label: 'My Cart',
     href: '/cart',
   },
+  {
+    label: 'Orders',
+    href: '/orders',
+  },
 ]

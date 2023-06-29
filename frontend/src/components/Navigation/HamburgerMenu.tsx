@@ -7,7 +7,7 @@ import {
   SwipeableDrawer,
 } from '@mui/material'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import { FC } from 'react'
+import { FC, FormEvent } from 'react'
 import { listStyle, navBarItemStyle } from '../../styles/HamburgerMenu'
 import { pageRoutes } from '../../routes/pageRoutes'
 import { useIsAuthenticated, useSignOut } from 'react-auth-kit'
@@ -23,7 +23,7 @@ const HamburgerMenu: FC<Props> = ({ isOpen, setIsOpen }) => {
   const isAuthenticated = useIsAuthenticated()
   const signOut = useSignOut()
 
-  const handleLogout = (e: React.FormEvent) => {
+  const handleLogout = (e: FormEvent) => {
     e.preventDefault()
     signOut()
     navigate('/login')

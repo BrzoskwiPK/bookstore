@@ -12,7 +12,7 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { AxiosError } from 'axios'
-import { FC, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import {
   boundaryDivStyle,
   containerStyle,
@@ -34,15 +34,17 @@ import { useSignIn } from 'react-auth-kit'
 import { loadUser, loginUser } from '../../services/api'
 
 const Login: FC = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
-  const [error, setError] = useState('')
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [rememberMe, setRememberMe] = useState<boolean>(false)
+  const [error, setError] = useState<string>('')
 
   const signIn = useSignIn()
   const navigate = useNavigate()
+  const isSubmitButtonDisabled = !email || !password
+  const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
-  const handleLogin = async (event: React.FormEvent) => {
+  const handleLogin = async (event: FormEvent) => {
     event.preventDefault()
 
     try {
@@ -66,18 +68,14 @@ const Login: FC = () => {
         })
 
         navigate('/dashboard')
-      } else 
-          setError(response.data.error)
+      } else setError(response.data.error)
     } catch (error) {
       if (error && error instanceof AxiosError)
         setError(error.response?.data.message)
-      else if (error && error instanceof Error)
-        setError(error.message)
+      else if (error && error instanceof Error) setError(error.message)
+      else setError(String(error))
     }
   }
-
-  const isSubmitButtonDisabled = !email || !password
-  const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
   return (
     <Container maxWidth={false} disableGutters sx={containerStyle}>

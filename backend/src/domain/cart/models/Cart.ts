@@ -1,8 +1,7 @@
-import { Schema } from 'mongoose'
 import CartItem from './CartItem'
 
 interface Cart {
-  user: Schema.Types.ObjectId
+  user: String
   items: CartItem[]
   totalQuantity: number
   totalPrice: number

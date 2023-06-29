@@ -15,8 +15,7 @@ export const cartSlice = createSlice({
         item => item.book.title === action.payload.book.title,
       )
       if (existingItem) {
-        existingItem.quantity += action.payload.quantity
-        existingItem.subtotal += action.payload.subtotal
+        existingItem.quantity += 1
       } else {
         state.items.push(action.payload)
       }
@@ -32,7 +31,9 @@ export const cartSlice = createSlice({
           item => item.book.title !== action.payload.book.title,
         ),
         totalQuantity: state.totalQuantity - action.payload.quantity,
-        totalPrice: state.totalPrice - action.payload.subtotal,
+        totalPrice:
+          state.totalPrice -
+          action.payload.quantity * action.payload.book.price,
       }
     },
     decreaseQuantity: (state, action: PayloadAction<CartItem>): Cart => {
@@ -50,7 +51,7 @@ export const cartSlice = createSlice({
         }
 
         state.totalQuantity -= 1
-        state.totalPrice -= action.payload.subtotal
+        state.totalPrice -= action.payload.book.price
       }
 
       return state
@@ -67,11 +68,11 @@ export const cartSlice = createSlice({
       }
 
       state.totalQuantity += 1
-      state.totalPrice += action.payload.subtotal
+      state.totalPrice += action.payload.book.price
 
       return state
     },
-    clearCart: state => {
+    clearCart: () => {
       return initialState
     },
   },

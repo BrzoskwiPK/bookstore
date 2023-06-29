@@ -3,7 +3,5 @@ services:
   database:
     image: 'mongo'
     container_name: 'mongoDB'
-    volumes:
-      - ./backend/src/adapters/mongodb/seed/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     ports:
       - '27017-27019:27017-27019'

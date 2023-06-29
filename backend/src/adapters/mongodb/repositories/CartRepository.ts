@@ -4,7 +4,7 @@ import CartItem from '../../../domain/cart/models/CartItem'
 import CartRepositoryInterface from '../../../interfaces/CartRepositoryInterface'
 
 interface ICartDocument extends Cart, Document {
-  user: Schema.Types.ObjectId
+  user: String
 }
 
 const cartItemSchema: Schema<CartItem> = new Schema<CartItem>({
@@ -14,7 +14,7 @@ const cartItemSchema: Schema<CartItem> = new Schema<CartItem>({
 })
 
 const cartSchema: Schema<ICartDocument> = new Schema<ICartDocument>({
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  user: { type: String, required: true },
   items: [cartItemSchema],
   totalQuantity: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
@@ -28,6 +28,25 @@ export const CartModel: Model<ICartDocument> = model<ICartDocument>(
 const createCart = async (cartData: Cart): Promise<Cart> => {
   const newCart = await CartModel.create(cartData)
   return newCart
+}
+
+const getUserCarts = async (username: string): Promise<Cart[] | null> => {
+  const carts = await CartModel.find({ user: username })
+    .populate('items.book')
+    .lean()
+    .exec()
+
+  return carts.map(cart => {
+    const populatedItems = cart.items.map(item => ({
+      ...item,
+      book: item.book,
+    }))
+
+    return {
+      ...cart,
+      items: populatedItems,
+    }
+  })
 }
 
 const getCartById = async (cartId: string): Promise<Cart | null> => {
@@ -76,6 +95,7 @@ const removeItemFromCart = async (
 
 const cartRepository: CartRepositoryInterface = {
   createCart,
+  getUserCarts,
   getCartById,
   updateCart,
   deleteCart,

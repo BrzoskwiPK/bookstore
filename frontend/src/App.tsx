@@ -9,6 +9,7 @@ import Dashboard from './components/Dashboard'
 import HomePage from './components/HomePage'
 import Bookshelf from './components/Bookshelf'
 import Cart from './components/Cart'
+import Orders from './components/Orders'
 
 const App = () => {
   return (
@@ -39,6 +40,14 @@ const App = () => {
             element={
               <RequireAuth loginPath="/login">
                 <Cart />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <RequireAuth loginPath="/login">
+                <Orders />
               </RequireAuth>
             }
           />

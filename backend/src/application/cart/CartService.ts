@@ -2,17 +2,13 @@ import CartRepository from '../../adapters/mongodb/repositories/CartRepository'
 import Cart from '../../domain/cart/models/Cart'
 import CartItem from '../../domain/cart/models/CartItem'
 
-const createCart = async (userId: any): Promise<Cart> => {
-  const cartData: Cart = {
-    user: userId,
-    items: [],
-    totalQuantity: 0,
-    totalPrice: 0,
-  }
-
+const createCart = async (cartData: Cart): Promise<Cart> => {
   const newCart = await CartRepository.createCart(cartData)
-
   return newCart
+}
+const getUserCarts = async (username: string): Promise<Cart[] | null> => {
+  const carts = await CartRepository.getUserCarts(username)
+  return carts
 }
 
 const getCartById = async (cartId: string): Promise<Cart | null> => {
@@ -51,6 +47,7 @@ const removeItemFromCart = async (
 
 const cartService = {
   createCart,
+  getUserCarts,
   getCartById,
   updateCart,
   deleteCart,

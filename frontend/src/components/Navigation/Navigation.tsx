@@ -1,6 +1,6 @@
 import { Button, Hidden, IconButton } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { FC } from 'react'
+import { FC, FormEvent } from 'react'
 import { navBarItemStyle } from '../../styles/Header'
 import { pageRoutes } from '../../routes/pageRoutes'
 import { useIsAuthenticated, useSignOut } from 'react-auth-kit'
@@ -15,7 +15,7 @@ const Navigation: FC<Props> = ({ setIsOpen }) => {
   const navigate = useNavigate()
   const isAuthenticated = useIsAuthenticated()
   
-  const handleLogout = (e: React.FormEvent) => {
+  const handleLogout = (e: FormEvent) => {
     e.preventDefault()
     signOut()
     navigate('/login')

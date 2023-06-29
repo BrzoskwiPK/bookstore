@@ -3,6 +3,7 @@ import CartItem from '../domain/cart/models/CartItem'
 
 interface CartRepositoryInterface {
   getCartById(cartId: string): Promise<Cart | null>
+  getUserCarts(username: string): Promise<Cart[] | null>
   createCart(cartData: Cart): Promise<Cart>
   updateCart(cartId: string, cartData: Cart): Promise<Cart | null>
   deleteCart(cartId: string): Promise<boolean>

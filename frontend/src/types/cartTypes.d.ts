@@ -5,6 +5,7 @@ interface CartItem {
 }
 
 interface Cart {
+  user: string
   items: CartItem[]
   totalQuantity: number
   totalPrice: number

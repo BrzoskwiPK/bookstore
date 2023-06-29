@@ -4,8 +4,19 @@ import CartItem from '../../../domain/cart/models/CartItem'
 
 const createCart = async (req: Request, res: Response) => {
   try {
-    const newCart = await CartService.createCart()
+    const cartData = req.body
+    const newCart = await CartService.createCart(cartData)
     res.status(201).json(newCart)
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' })
+  }
+}
+
+const getUserCarts = async (req: Request, res: Response) => {
+  try {
+    const { username } = req.body
+    const carts = await CartService.getUserCarts(username)
+    res.status(200).json(carts)
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' })
   }
@@ -86,6 +97,7 @@ const removeItemFromCart = async (req: Request, res: Response) => {
 
 const cartController = {
   createCart,
+  getUserCarts,
   getCartById,
   updateCart,
   deleteCart,

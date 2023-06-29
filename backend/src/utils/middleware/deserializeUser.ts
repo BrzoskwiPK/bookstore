@@ -14,7 +14,7 @@ const deserializeUser = async (
 
   if (decoded) res.locals.user = decoded
 
-  next()
+  return next()
 }
 
 export default deserializeUser

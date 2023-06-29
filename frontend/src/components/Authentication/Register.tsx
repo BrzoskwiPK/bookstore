@@ -8,7 +8,7 @@ import {
   styled,
   useMediaQuery,
 } from '@mui/material'
-import { FC, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import { AxiosError } from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import {
@@ -38,8 +38,15 @@ const Register: FC = () => {
 
   const signIn = useSignIn()
   const navigate = useNavigate()
+  const isSubmitButtonDisabled =
+  !username ||
+  !email ||
+  !password ||
+  !passwordConfirmation ||
+  password !== passwordConfirmation
+const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
-  const handleRegister = async (event: React.FormEvent) => {
+  const handleRegister = async (event: FormEvent) => {
     event.preventDefault()
 
     const userData: RegisterRequest = {
@@ -82,16 +89,10 @@ const Register: FC = () => {
         setError(error.response?.data.message)
       else if (error && error instanceof Error)
         setError(error.message)
+      else
+        setError(String(error))
     }
   }
-
-  const isSubmitButtonDisabled =
-    !username ||
-    !email ||
-    !password ||
-    !passwordConfirmation ||
-    password !== passwordConfirmation
-  const isSmallDevice = useMediaQuery('(max-width: 450px)')
 
   return (
     <Container maxWidth={false} disableGutters sx={containerStyle}>

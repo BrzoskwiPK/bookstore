@@ -5,7 +5,6 @@ import { signJwt } from '../../../utils/jwt'
 import { omit } from 'lodash'
 import { DocumentType } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
-import cartService from '../../../application/cart/CartService'
 
 interface IUserDocument extends User, Document {}
 interface ISessionDocument extends Document {
@@ -58,9 +57,6 @@ const createUser = async (userData: Partial<User>): Promise<User> => {
     password: hashedPassword,
   })
 
-  const userDoc = user as DocumentType<User>
-  await cartService.createCart(userDoc._id.toString())
-
   return user
 }
 
@@ -88,7 +84,7 @@ export const signAccessToken = (user: DocumentType<User>) => {
   const payload = omit(user.toJSON(), ['password', '__v', 'role'])
 
   const accessToken = signJwt(payload, 'accessTokenPrivateKey', {
-    expiresIn: '30m',
+    expiresIn: '120m',
   })
 
   return accessToken
@@ -116,7 +112,7 @@ export const signRefreshToken = async ({ userId }: { userId: any }) => {
     },
     'refreshTokenPrivateKey',
     {
-      expiresIn: '60m',
+      expiresIn: '120m',
     },
   )
 
