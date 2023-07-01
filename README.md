@@ -157,6 +157,10 @@ Here you can find some screenshots that show basic functionality of this applica
 
 ![authorized](https://github.com/BrzoskwiPK/bookstore-app/assets/101000424/5c65007d-82ac-40fa-94ee-9db6afc712ef)
 
+**<p align="center">Custom 404</p>**
+
+![404](https://github.com/BrzoskwiPK/bookstore-app/assets/101000424/c661e4ec-6acf-4c46-8fca-b36f16fc554e)
+
 **<p align="center">LoginPage</p>**
 
 ![login](https://github.com/BrzoskwiPK/bookstore-app/assets/101000424/c54363ab-ed8c-41a9-ab1f-2728a94c7a54)
