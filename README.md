@@ -29,9 +29,23 @@ Bookstore-app is a full-stack application resembling an online bookstore. We can
 The Bookstore App follows the Onion Architecture pattern. This architectural approach emphasizes the separation of concerns and provides a clear distinction between the business logic, infrastructure, and external dependencies. The architecture is divided into layers, with the innermost layer containing the core business logic and the outer layers handling infrastructure and communication with external services. Particular calls to the API require authorization, which is checked by middleware. User can get access to all of the microservices via API. Here is the list of endpoints:
 
 **AuthService: PORT 3003**
-- GET /loadUser
 - POST /register
+  
+<p>{
+  "username": "user",
+  "email": "user@gmail.com",
+  "password": "password",
+  "passwordConfirmation": "password" }
+</p>
+
 - POST /login
+  
+<p>{
+  "username": "admin@gmail.com",
+  "password": "password"
+}</p>
+
+- GET /loadUser
 - POST /refreshToken
 
 **BookService: PORT 3001**
