@@ -23,7 +23,7 @@ const createBook = async (bookData: Book): Promise<Book> => {
 }
 
 const getBookById = async (bookId: string): Promise<Book | null> => {
-  const book = await BookModel.findById(bookId).exec()
+  const book = await BookModel.findById(bookId)
   return book
 }
 
@@ -33,17 +33,17 @@ const updateBook = async (
 ): Promise<Book | null> => {
   const updatedBook = await BookModel.findByIdAndUpdate(bookId, bookData, {
     new: true,
-  }).exec()
+  })
   return updatedBook
 }
 
 const deleteBook = async (bookId: string): Promise<boolean> => {
-  const result = await BookModel.findByIdAndDelete(bookId).exec()
+  const result = await BookModel.findByIdAndDelete(bookId)
   return !!result
 }
 
 const getAllBooks = async (): Promise<Book[]> => {
-  const books = await BookModel.find().exec()
+  const books = await BookModel.find()
   return books
 }
 

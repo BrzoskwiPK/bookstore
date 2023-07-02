@@ -34,7 +34,6 @@ const getUserCarts = async (username: string): Promise<Cart[] | null> => {
   const carts = await CartModel.find({ user: username })
     .populate('items.book')
     .lean()
-    .exec()
 
   return carts.map(cart => {
     const populatedItems = cart.items.map(item => ({
@@ -50,7 +49,7 @@ const getUserCarts = async (username: string): Promise<Cart[] | null> => {
 }
 
 const getCartById = async (cartId: string): Promise<Cart | null> => {
-  const cart = await CartModel.findById(cartId).exec()
+  const cart = await CartModel.findById(cartId)
   return cart ? { ...cart.toObject() } : null
 }
 
@@ -60,12 +59,12 @@ const updateCart = async (
 ): Promise<Cart | null> => {
   const updatedCart = await CartModel.findByIdAndUpdate(cartId, cartData, {
     new: true,
-  }).exec()
+  })
   return updatedCart ? { ...updatedCart.toObject() } : null
 }
 
 const deleteCart = async (cartId: string): Promise<boolean> => {
-  const result = await CartModel.findByIdAndDelete(cartId).exec()
+  const result = await CartModel.findByIdAndDelete(cartId)
   return !!result
 }
 
@@ -77,7 +76,7 @@ const addItemToCart = async (
     cartId,
     { $push: { items: item } },
     { new: true },
-  ).exec()
+  )
   return updatedCart ? { ...updatedCart.toObject() } : null
 }
 
@@ -89,7 +88,7 @@ const removeItemFromCart = async (
     cartId,
     { $pull: { items: { _id: itemId } } },
     { new: true },
-  ).exec()
+  )
   return updatedCart ? { ...updatedCart.toObject() } : null
 }
 

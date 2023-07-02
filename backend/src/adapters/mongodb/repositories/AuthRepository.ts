@@ -6,7 +6,7 @@ import { omit } from 'lodash'
 import { DocumentType } from '@typegoose/typegoose'
 import bcrypt from 'bcrypt'
 
-interface IUserDocument extends User, Document {}
+export interface IUserDocument extends User, Document {}
 interface ISessionDocument extends Document {
   user: Schema.Types.ObjectId
   valid: boolean
@@ -61,12 +61,12 @@ const createUser = async (userData: Partial<User>): Promise<User> => {
 }
 
 const findUserById = async (id: string): Promise<User | null> => {
-  const user = await UserModel.findById(id).exec()
+  const user = await UserModel.findById(id)
   return user
 }
 
 const findUserByEmail = async (email: string): Promise<User | null> => {
-  const user = await UserModel.findOne({ email }).exec()
+  const user = await UserModel.findOne({ email })
   return user
 }
 
