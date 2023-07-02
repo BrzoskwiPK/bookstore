@@ -105,10 +105,10 @@ Let's begin with creating a container that contains our local instance of databa
 2. Open the terminal and run the command:
    `docker-compose up -d`.
 3. It may take a few moments to complete, you can watch the progress visible in the terminal.
-4. Once container is ready and started, change the directory to: _/backend_.
+4. Once container is ready and started, change the directory to: _/backend/src_.
 5. Run the command `npm i` and wait until all dependencies are installed.
 6. Now go to the _/frontend_ directory and repeat the installation by running the `npm i` command.
-7. Once all dependencies are installed, we can now seed the database with a previously created script. Just come back to the /_backend_ directory.
+7. Once all dependencies are installed, we can now seed the database with a previously created script. Just come back to the /_backend/src_ directory.
 8. Run the **npm run seed** command and wait until a log saying that seeding the database was successful appears. Then just terminate the job.
 
 Script should load two test users to the database.<br>One of them has elevated privileges (admin) and one is just a standard user (standard).<br>
@@ -127,14 +127,14 @@ Here you can find authentication credentials:
 #### How to run application
 
 1. Open Docker Desktop and check if your container with MongoDB is running.
-2. In order to run the backend, navigate to _/backend_ directory and run `npm run dev` command.
+2. In order to run the backend, navigate to _/backend/src_ directory and run `npm run dev` command.
 3. In order to run the frontend, navigate to _/frontend_ directory and run `npm run dev` command.
 
 Application should be running. You can check that by visiting [homepage](http://localhost:5173/).
 
 #### How to run tests
 
-1. Backend tests can be run by running `npm run test` command in the _/backend_ directory.
+1. Backend tests can be run by running `npm run test` command in the _/backend/src_ directory.
 2. Frontend tests can be run by running `npm run test` command in the _/frontend_ directory.
 
 ---
