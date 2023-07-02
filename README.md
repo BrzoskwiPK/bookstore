@@ -41,7 +41,7 @@ The Bookstore App follows the Onion Architecture pattern. This architectural app
 - POST /login
   
 <p>{
-  "username": "admin@gmail.com",
+  "email": "admin@gmail.com",
   "password": "password"
 }</p>
 
